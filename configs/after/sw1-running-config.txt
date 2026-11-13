@@ -1,0 +1,245 @@
+
+SW1#show running-config
+Building configuration...
+
+Current configuration : 5086 bytes
+!
+! Last configuration change at 14:57:41 UTC Fri Nov 13 2026
+!
+version 15.2
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+no service dhcp
+!
+hostname SW1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+logging buffered 64000
+logging console critical
+enable secret 5 $1$3ijm$uFBZ6woiWgo9cwbwXhfAu0
+!
+username admin password 7 013F0706165957587401670710
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authentication login CIS_LOGIN local
+aaa authentication enable default enable
+!
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+!
+!
+no ip source-route
+!
+!
+!
+no ip bootp server
+no ip domain-lookup
+ip domain-name lab.local
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree portfast edge bpduguard default
+spanning-tree extend system-id
+!
+no cdp run
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ description A-FW1-PORT2
+ switchport access vlan 10
+ switchport mode access
+ negotiation auto
+ spanning-tree portfast edge
+!
+interface GigabitEthernet0/1
+ description DOCKER-CIS-LAB
+ switchport access vlan 10
+ switchport mode access
+ negotiation auto
+ spanning-tree portfast edge
+!
+interface GigabitEthernet0/2
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/1
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet3/1
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet3/2
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ description PUERTO-SIN-USO
+ shutdown
+ negotiation auto
+!
+interface Vlan10
+ ip address 10.21.75.2 255.255.255.0
+ no ip proxy-arp
+!
+ip default-gateway 10.21.75.1
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip ssh time-out 60
+ip ssh authentication-retries 2
+ip ssh rsa keypair-name CIS-SSH
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+ip access-list standard CIS_VTY_ACL
+ permit 10.21.75.10
+ deny   any log
+!
+!
+logging host 10.21.75.10
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+IOSv - Cisco Systems Confidential -
+
+
+Supplemental End User License Restrictions
+
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+
+By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
+^C
+banner incoming ^C
+IOSv - Cisco Systems Confidential -
+
+
+Supplemental End User License Restrictions
+
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+
+By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
+^C
+banner login ^C
+IOSv - Cisco Systems Confidential -
+
+
+Supplemental End User License Restrictions
+
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+
+By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
+^C
+banner motd ^CACCESO RESTRINGIDO - Solo personal autorizado. La actividad en este equipo es monitoreada y registrada.^C
+!
+line con 0
+ exec-timeout 5 0
+ logging synchronous
+ login authentication CIS_LOGIN
+line aux 0
+ exec-timeout 5 0
+ no exec
+line vty 0 4
+ access-class CIS_VTY_ACL in
+ exec-timeout 5 0
+ login authentication CIS_LOGIN
+ transport input ssh
+!
+!
+end
