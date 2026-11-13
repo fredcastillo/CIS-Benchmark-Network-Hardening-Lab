@@ -1,0 +1,180 @@
+
+R1#show running-config
+Building configuration...
+
+Current configuration : 2686 bytes
+!
+! No configuration change since last restart
+!
+version 15.2
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+no service dhcp
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+logging buffered 64000
+logging console critical
+enable secret 5 $1$deR3$vJTwHUXxRiQCgSSYRQccw1
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authentication login CIS_LOGIN local
+aaa authentication enable default enable
+!
+!
+!
+!
+!
+aaa session-id common
+no ip source-route
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+no ip bootp server
+no ip domain lookup
+ip domain name lab.local
+ip cef
+no ipv6 cef
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+username admin secret 5 $1$nfYU$b7/Paj4GE3RdlqJpxv0Vr.
+!
+!
+!
+!
+!
+ip tcp synwait-time 5
+ip ssh time-out 60
+ip ssh authentication-retries 2
+ip ssh rsa keypair-name CIS-SSH
+ip ssh version 2
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description INTERNET-SIMULADA
+ ip address 203.0.113.100 255.255.255.255
+!
+interface FastEthernet0/0
+ description ENLACE-A-FW1-PORT1
+ ip address 203.0.113.21 255.255.255.252
+ no ip proxy-arp
+ duplex full
+!
+interface GigabitEthernet1/0
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface FastEthernet3/0
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet3/1
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet4/0
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet4/1
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet5/0
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet5/1
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ip access-list standard CIS_VTY_ACL
+ permit 203.0.113.22
+ deny   any log
+!
+no cdp run
+!
+!
+!
+!
+control-plane
+!
+banner exec ^CACCESO RESTRINGIDO - Solo personal autorizado. La actividad en este equipo es monitoreada y registrada.^C
+banner login ^CACCESO RESTRINGIDO - Solo personal autorizado. La actividad en este equipo es monitoreada y registrada.^C
+banner motd ^CACCESO RESTRINGIDO - Solo personal autorizado. La actividad en este equipo es monitoreada y registrada.^C
+!
+line con 0
+ exec-timeout 5 0
+ privilege level 15
+ logging synchronous
+ login authentication CIS_LOGIN
+ stopbits 1
+line aux 0
+ exec-timeout 5 0
+ privilege level 15
+ logging synchronous
+ no exec
+ stopbits 1
+line vty 0 4
+ access-class CIS_VTY_ACL in
+ exec-timeout 5 0
+ login authentication CIS_LOGIN
+ transport input ssh
+!
+ntp master 3
+!
+end
+
