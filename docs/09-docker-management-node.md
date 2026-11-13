@@ -34,6 +34,3 @@ Las credenciales pueden solicitarse interactivamente cuando no estén definidas.
 - `/work/informes/`: informes y respaldos.
 - `/work/logs/`: archivos de syslog.
 
-## Construcción
-
-El Dockerfile original y el contexto completo de construcción no forman parte de los archivos recibidos para esta documentación. Por ello, no se incorpora un Dockerfile reconstruido que pueda diferir de la imagen ejecutada. La imagen local utilizada fue identificada como `cis-lab:1.0`.
