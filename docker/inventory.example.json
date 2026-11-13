@@ -1,0 +1,32 @@
+{
+  "devices": [
+    {
+      "name": "R1",
+      "hostname": "R1",
+      "host": "203.0.113.21",
+      "platform": "cisco_ios",
+      "role": "router",
+      "mgmt_subnet": "203.0.113.22/32",
+      "exceptions": {
+        "C-31": "Ejemplo de excepción: router de borde sin ruta hacia el servidor syslog privado; validar y adaptar a la topología propia."
+      }
+    },
+    {
+      "name": "SW1",
+      "hostname": "SW1",
+      "host": "10.21.75.2",
+      "platform": "cisco_ios",
+      "role": "switch",
+      "mgmt_subnet": "10.21.75.10/32"
+    },
+    {
+      "name": "FW1",
+      "hostname": "FW1",
+      "host": "10.21.75.1",
+      "platform": "fortinet",
+      "role": "firewall",
+      "mgmt_subnet": "10.21.75.10/32",
+      "wan_iface": "port1"
+    }
+  ]
+}
