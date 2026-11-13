@@ -15,9 +15,3 @@ Para completar la evidencia posterior, exportar desde los equipos endurecidos:
 - R1: `show running-config`
 - SW1: `show running-config`
 - FW1: `show full-configuration`
-
-Guardar los archivos completos y sanitizados en `configs/after/` conservando los nombres establecidos en el README.
-
-## Sanitización
-
-Antes de publicar configuraciones, revisar y sustituir hashes de contraseñas, secretos, claves privadas, tokens, direcciones externas que no deban difundirse y otros datos sensibles. La configuración publicada debe seguir siendo legible para fines de revisión técnica.
