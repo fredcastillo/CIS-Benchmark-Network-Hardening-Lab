@@ -1,0 +1,33 @@
+! R1 — Cisco c7200 — configuración inicial documentada
+! Las credenciales se han sustituido por <LAB_PASSWORD>.
+enable
+configure terminal
+hostname R1
+no ip domain-lookup
+ip domain-name lab.local
+username admin privilege 15 password <LAB_PASSWORD>
+enable password <LAB_PASSWORD>
+
+interface Loopback0
+ description INTERNET-SIMULADA
+ ip address 203.0.113.100 255.255.255.255
+
+interface FastEthernet0/0
+ description ENLACE-A-FW1-PORT1
+ ip address 203.0.113.21 255.255.255.252
+ no shutdown
+
+ntp master 3
+snmp-server community public RO
+ip http server
+
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+line vty 0 4
+ login local
+ transport input all
+
+! Preparación SSH inicial:
+! crypto key generate rsa general-keys modulus 1024
+! ip ssh version 2

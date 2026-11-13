@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# cis-lab - comando unico del contenedor
+APP="${CIS_APP:-/opt/cis-lab}"
+WORK="${CIS_WORK:-/work}"
+INV="${CIS_INVENTORY:-$WORK/inventory.json}"
+OUT="${CIS_OUTDIR:-$WORK/informes}"
+
+usage() {
+cat <<TXT
+cis-lab - auditoria y hardening CIS (Cisco IOS / FortiGate)
+
+  cis-lab audit  [opciones]   Solo informe, NO cambia nada (equivale a un dry-run)
+  cis-lab apply  [opciones]   Respalda, aplica, verifica reconexion, guarda e informa (antes/despues)
+  cis-lab verify [--nmap]     Pruebas de conectividad/puertos/TLS (correr antes y despues del apply)
+  cis-lab list                Lista los controles implementados
+  cis-lab ip IP/MASC GW       Plan B de red: asigna IP y gateway a eth0 (ej: cis-lab ip 10.21.75.10/24 10.21.75.1)
+  cis-lab syslog              Inicia el receptor syslog (UDP/514 -> $WORK/logs/<ip>.log)
+  cis-lab logs                Sigue en vivo los logs recibidos
+  cis-lab shell               Inicia syslog y abre una shell (modo GNS3)
+
+Opciones de audit/apply (se pasan al script): --only R1,SW1  --yes  --no-save  --fail-under 80
+Credenciales: variables CISCO_USER, CISCO_PASS, CISCO_ENABLE, FGT_USER, FGT_PASS (o se piden por teclado).
+Archivos: inventario $INV | informes $OUT
+TXT
+}
+
+ensure_inventory() {
+  if [ ! -f "$INV" ]; then
+    mkdir -p "$(dirname "$INV")"
+    cp "$APP/inventory.example.json" "$INV"
+    echo "[i] Inventario de ejemplo copiado a $INV (editalo si tu red es distinta)"
+  fi
+}
+
+start_syslog() {
+  mkdir -p "$WORK/logs"
+  if ! pgrep -x rsyslogd >/dev/null 2>&1; then
+    rsyslogd -f /etc/rsyslog.conf 2>/dev/null && echo "[+] syslog escuchando en UDP/514 -> $WORK/logs/<ip>.log"
+  fi
+}
+
+cmd="${1:-help}"; [ $# -gt 0 ] && shift
+case "$cmd" in
+  audit|apply)
+    ensure_inventory; mkdir -p "$OUT"
+    exec python3 "$APP/hardening_cis.py" --mode "$cmd" --inventory "$INV" --outdir "$OUT" "$@" ;;
+  verify)  exec bash "$APP/verify.sh" "$@" ;;
+  list)    exec python3 "$APP/hardening_cis.py" --list-checks ;;
+  ip)
+    [ $# -ge 2 ] || { echo "uso: cis-lab ip 10.21.75.10/24 10.21.75.1"; exit 1; }
+    ip addr flush dev eth0 2>/dev/null; ip addr add "$1" dev eth0 && ip link set eth0 up \
+      && ip route replace default via "$2" && ip -br addr show eth0 ;;
+  syslog)  start_syslog ;;
+  logs)    shopt -s nullglob; f=("$WORK"/logs/*.log)
+           [ ${#f[@]} -gt 0 ] && exec tail -n 20 -F "${f[@]}" || echo "Aun no hay logs en $WORK/logs" ;;
+  shell)   start_syslog >/dev/null
+           echo "== cis-lab 1.0 == escribe: cis-lab help"; exec bash -l ;;
+  help|-h|--help) usage ;;
+  *) echo "Comando desconocido: $cmd"; usage; exit 1 ;;
+esac

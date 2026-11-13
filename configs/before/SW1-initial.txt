@@ -1,0 +1,39 @@
+! SW1 — Cisco IOSvL2 — configuración inicial documentada
+! Las credenciales se han sustituido por <LAB_PASSWORD>.
+enable
+configure terminal
+hostname SW1
+no ip domain-lookup
+ip domain-name lab.local
+username admin privilege 15 password <LAB_PASSWORD>
+enable password <LAB_PASSWORD>
+
+vlan 10
+ name LAN
+
+interface Vlan10
+ ip address 10.21.75.2 255.255.255.0
+ no shutdown
+
+ip default-gateway 10.21.75.1
+
+interface GigabitEthernet0/0
+ description A-FW1-PORT2
+ switchport mode access
+ switchport access vlan 10
+
+interface GigabitEthernet0/1
+ description DOCKER-CIS-LAB
+ switchport mode access
+ switchport access vlan 10
+
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+line vty 0 4
+ login local
+ transport input all
+
+! Preparación SSH inicial:
+! crypto key generate rsa general-keys modulus 1024
+! ip ssh version 2
