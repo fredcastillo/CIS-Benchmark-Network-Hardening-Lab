@@ -13,7 +13,11 @@
 
 ## 🎥 VIDEO DEMOSTRATIVO
 
-**Video:** enlace de YouTube pendiente de incorporar.
+<p align="center">
+  <a href="https://youtu.be/ELAJC6O323o">
+    <img src="https://img.youtube.com/vi/ELAJC6O323o/maxresdefault.jpg" alt="Ver video" width="960">
+  </a>
+</p>
 
 ---
 
@@ -395,3 +399,13 @@ Los archivos completos posteriores deben exportarse desde el estado final de los
 - Las configuraciones iniciales débiles se utilizaron para demostrar detección y remediación dentro del laboratorio aislado.
 - Las contraseñas de laboratorio y otros secretos no forman parte de este repositorio.
 - Este proyecto no está afiliado ni respaldado por CIS.
+
+
+## 👨‍💻 Autor
+
+**Fred Castillo**  
+*Tecnólogo en Seguridad Informática*  
+*Red Team | Seguridad Ofensiva*
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Fred%20Castillo-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/fredcastillo11/) [![GitHub](https://img.shields.io/badge/GitHub-fredcastillo-100000?style=for-the-badge&logo=github)](https://github.com/fredcastillo)
+[![Docker Hub](https://img.shields.io/badge/Docker_Hub-fredcastillo-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/u/fredcastillo)
